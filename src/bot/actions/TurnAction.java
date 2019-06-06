@@ -18,9 +18,8 @@ public class TurnAction implements Action{
 
 	@Override
 	public void Perform() {
-
-		Controls.NAVIGATION.rotateTo(deg);
-		Controls.NAVIGATION.waitForStop();
+		Controls.PILOT.rotate(deg);
+		System.out.println("TURNING " + deg);
 	}
 
 }
