@@ -1,4 +1,5 @@
 package bot;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -34,70 +35,67 @@ public class Main {
 		LCD.drawString("Booting that shiit", 0, 4);
 		Delay.msDelay(1000);
 
-		 double wheelDiameter = 3.7;
-		 double trackWidth = 13;
- 
-		
+		double wheelDiameter = 3.8;
+		double trackWidth = 12.2;
+
 		// Setup Motors
 
 		Controls.COLLECTOR = new EV3MediumRegulatedMotor(MotorPort.A);
 		Controls.LEFT_WHEEL = new EV3LargeRegulatedMotor(MotorPort.B);
 		Controls.RIGHT_WHEEL = new EV3LargeRegulatedMotor(MotorPort.C);
-		
-		 Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL,wheelDiameter).offset(-12).invert(true);
-		 Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL,wheelDiameter).offset(12).invert(true);
 
-		 Chassis myChassis = new WheeledChassis(new Wheel[]{rightWheel,leftWheel} ,WheeledChassis.TYPE_DIFFERENTIAL);
-		 Controls.PILOT = new MovePilot(myChassis);
-		 Controls.NAVIGATION = new Navigator(Controls.PILOT);
-		
+		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-1 * trackWidth).invert(true);
+		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(trackWidth).invert(true);
+
+		Chassis myChassis = new WheeledChassis(new Wheel[] { rightWheel, leftWheel }, WheeledChassis.TYPE_DIFFERENTIAL);
+		Controls.PILOT = new MovePilot(myChassis);
+		Controls.NAVIGATION = new Navigator(Controls.PILOT);
+
 		server = new ServerSocket(port);
 
-		//while (true) {
-			LCD.drawString("Waiting for connections", 0, 4);
+		// while (true) {
+		LCD.drawString("Waiting for connections", 0, 4);
 
-			client = server.accept();
-			
-			LCD.drawString("Client Connected", 0, 4);
+		client = server.accept();
 
-			
-			outputStream = new DataOutputStream(client.getOutputStream());
-			inputStream = new ObjectInputStream(client.getInputStream());
+		LCD.drawString("Client Connected", 0, 4);
 
-			Runnable inputGrapper = new Runnable() {
+		outputStream = new DataOutputStream(client.getOutputStream());
+		inputStream = new ObjectInputStream(client.getInputStream());
 
-				@Override
-				public void run() {
+		Runnable inputGrapper = new Runnable() {
 
-					while (true) {
-						try {
-							ActionList list = (ActionList) inputStream.readObject();
-							ExecuteActions(list);
-						} catch (ClassNotFoundException | IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+			@Override
+			public void run() {
 
+				while (true) {
+					try {
+						ActionList list = (ActionList) inputStream.readObject();
+						ExecuteActions(list);
+					} catch (ClassNotFoundException | IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				}
-			};
-			
-			ExecutorService executor = Executors.newSingleThreadExecutor();
-			executor.execute(inputGrapper);
 
-	//	}
+				}
+			}
+		};
+
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		executor.execute(inputGrapper);
+
 	}
 
 	public void ExecuteActions(ActionList list) {
-		
+
 		for (Action action : list) {
-			
+
 			action.Perform();
 		}
-		
+
 		Controls.NAVIGATION = new Navigator(Controls.PILOT);
 		Controls.NAVIGATION.clearPath();
-		
+
 		try {
 			outputStream.writeUTF(Messages.DONE);
 		} catch (IOException e) {
@@ -105,7 +103,7 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) throws IOException {
 		new Main();
 	}

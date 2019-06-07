@@ -12,6 +12,7 @@ public class StartCollectionAction implements Action{
 
 	@Override
 	public void Perform() {
+		Controls.COLLECTOR.setSpeed(Controls.COLLECTOR.getMaxSpeed());
 		Controls.COLLECTOR.forward();
 	}
 
