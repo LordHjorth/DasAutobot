@@ -29,15 +29,20 @@ public class Main {
 	private ObjectInputStream inputStream;
 	private int port = 4444;
 	private DataOutputStream outputStream;
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public Main() throws IOException {
 
 		LCD.drawString("Booting that shiit", 0, 4);
 		Delay.msDelay(1000);
 
-		double wheelDiameter = 3.8;
-		double trackWidth = 12.2;
+//		double wheelDiameter = 3.8;
+//		double trackWidth = 12.2;
 
+		double wheelDiameter = 3.28;
+		double trackWidth = 21.37/2;
+
+		
 		// Setup Motors
 
 		Controls.COLLECTOR = new EV3MediumRegulatedMotor(MotorPort.A);
@@ -53,7 +58,7 @@ public class Main {
 
 		server = new ServerSocket(port);
 
-		// while (true) {
+		while (true) {
 		LCD.drawString("Waiting for connections", 0, 4);
 
 		client = server.accept();
@@ -75,14 +80,18 @@ public class Main {
 					} catch (ClassNotFoundException | IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						System.out.println("something failed!!");
+						System.out.println("Trying to restart!!");
+						break;
 					}
 
 				}
 			}
 		};
 
-		ExecutorService executor = Executors.newSingleThreadExecutor();
 		executor.execute(inputGrapper);
+		
+	}
 
 	}
 
@@ -94,8 +103,6 @@ public class Main {
 		}
 
 		Controls.NAVIGATION = new Navigator(Controls.PILOT);
-		Controls.NAVIGATION.clearPath();
-
 		try {
 			outputStream.writeUTF(Messages.DONE);
 		} catch (IOException e) {

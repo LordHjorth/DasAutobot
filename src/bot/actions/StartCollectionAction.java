@@ -4,7 +4,6 @@ import bot.Controls;
 
 public class StartCollectionAction implements Action{
 
-	
 	/**
 	 * 
 	 */
@@ -12,7 +11,10 @@ public class StartCollectionAction implements Action{
 
 	@Override
 	public void Perform() {
-		Controls.COLLECTOR.setSpeed(Controls.COLLECTOR.getMaxSpeed());
+		
+		
+		Controls.COLLECTOR.setSpeed((int)(-Controls.COLLECTOR.getMaxSpeed()*60));
+		
 		Controls.COLLECTOR.forward();
 	}
 

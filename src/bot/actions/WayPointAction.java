@@ -9,11 +9,11 @@ public class WayPointAction implements Action {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	float x;
-	float y;
+	double x;
+	double y;
 	float speed;
 
-	public WayPointAction(float x, float y, float speed) {
+	public WayPointAction(double x, double y, float speed) {
 		this.x = x;
 		this.y = y;
 		this.speed = speed;
@@ -22,7 +22,9 @@ public class WayPointAction implements Action {
 	@Override
 	public void Perform() {
 		Controls.PILOT.setAngularSpeed(Controls.PILOT.getMaxAngularSpeed() * speed);
-		Controls.NAVIGATION.goTo(x, y);
+		Controls.PILOT.setLinearSpeed(Controls.PILOT.getMaxLinearSpeed() * speed);
+		
+		Controls.NAVIGATION.goTo((float) x, (float) y);
 		Controls.NAVIGATION.waitForStop();
 	}
 
