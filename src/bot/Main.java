@@ -15,6 +15,9 @@ import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.robotics.Color;
 import lejos.robotics.chassis.Chassis;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
@@ -29,7 +32,8 @@ public class Main {
 	private ObjectInputStream inputStream;
 	private int port = 4444;
 	private DataOutputStream outputStream;
-	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private ExecutorService executor = Executors.newFixedThreadPool(2);
+	private int counter = 0;
 
 	public Main() throws IOException {
 
@@ -40,58 +44,102 @@ public class Main {
 //		double trackWidth = 12.2;
 
 		double wheelDiameter = 3.28;
-		double trackWidth = 21.37/2;
+		double trackWidth = 21.37 / 2;
 
-		
 		// Setup Motors
 
 		Controls.COLLECTOR = new EV3MediumRegulatedMotor(MotorPort.A);
 		Controls.LEFT_WHEEL = new EV3LargeRegulatedMotor(MotorPort.B);
 		Controls.RIGHT_WHEEL = new EV3LargeRegulatedMotor(MotorPort.C);
+		Controls.PORT_OPEN = new EV3MediumRegulatedMotor(MotorPort.D);
 
-		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-1 * trackWidth).invert(true);
-		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(trackWidth).invert(true);
+		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-1 * trackWidth)
+				.invert(true);
+		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(trackWidth)
+				.invert(true);
 
 		Chassis myChassis = new WheeledChassis(new Wheel[] { rightWheel, leftWheel }, WheeledChassis.TYPE_DIFFERENTIAL);
 		Controls.PILOT = new MovePilot(myChassis);
 		Controls.NAVIGATION = new Navigator(Controls.PILOT);
 
+		// Setup ColorSensor
+		Controls.COLORSENSOR = new EV3ColorSensor(SensorPort.S4);
+
 		server = new ServerSocket(port);
 
 		while (true) {
-		LCD.drawString("Waiting for connections", 0, 4);
+			LCD.drawString("Waiting for connections", 0, 4);
 
-		client = server.accept();
+			client = server.accept();
 
-		LCD.drawString("Client Connected", 0, 4);
+			LCD.drawString("Client Connected", 0, 4);
 
-		outputStream = new DataOutputStream(client.getOutputStream());
-		inputStream = new ObjectInputStream(client.getInputStream());
+			outputStream = new DataOutputStream(client.getOutputStream());
+			inputStream = new ObjectInputStream(client.getInputStream());
 
-		Runnable inputGrapper = new Runnable() {
+			Runnable inputGrapper = new Runnable() {
 
-			@Override
-			public void run() {
+				@Override
+				public void run() {
 
-				while (true) {
-					try {
-						ActionList list = (ActionList) inputStream.readObject();
-						ExecuteActions(list);
-					} catch (ClassNotFoundException | IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						System.out.println("something failed!!");
-						System.out.println("Trying to restart!!");
-						break;
+					while (true) {
+						try {
+							ActionList list = (ActionList) inputStream.readObject();
+							ExecuteActions(list);
+						} catch (ClassNotFoundException | IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							System.out.println("something failed!!");
+							System.out.println("Trying to restart!!");
+							break;
+						}
+
 					}
-
 				}
-			}
-		};
+			};
 
-		executor.execute(inputGrapper);
-		
-	}
+			executor.execute(inputGrapper);
+
+			Runnable runsensor = new Runnable() {
+
+				@Override
+				public void run() {
+
+					while (counter < 10) {
+						try {
+
+							int currentDetectedColor = Controls.COLORSENSOR.getColorID();
+
+							if (currentDetectedColor == Color.WHITE) {
+
+								counter++;
+
+								outputStream.writeUTF(Messages.COLLECTED);
+								Thread.sleep(1000);
+
+							}
+
+						} catch (Exception e) {
+
+							e.printStackTrace();
+							System.out.println("something failed!!");
+							System.out.println("Trying to restart!!");
+							break;
+						}
+
+					}
+					Controls.COLORSENSOR.close();
+					try {
+						outputStream.writeUTF(Messages.FINISHED);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			};
+
+			executor.execute(runsensor);
+
+		}
 
 	}
 
@@ -106,7 +154,6 @@ public class Main {
 		try {
 			outputStream.writeUTF(Messages.DONE);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
