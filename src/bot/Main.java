@@ -34,6 +34,7 @@ public class Main {
 	private DataOutputStream outputStream;
 	private ExecutorService executor = Executors.newFixedThreadPool(2);
 	private int counter = 0;
+	private WheeledChassis myChassis;
 
 	public Main() throws IOException {
 
@@ -58,7 +59,7 @@ public class Main {
 		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(trackWidth)
 				.invert(true);
 
-		Chassis myChassis = new WheeledChassis(new Wheel[] { rightWheel, leftWheel }, WheeledChassis.TYPE_DIFFERENTIAL);
+		 myChassis = new WheeledChassis(new Wheel[] { rightWheel, leftWheel }, WheeledChassis.TYPE_DIFFERENTIAL);
 		Controls.PILOT = new MovePilot(myChassis);
 		Controls.NAVIGATION = new Navigator(Controls.PILOT);
 
@@ -150,7 +151,9 @@ public class Main {
 			action.Perform();
 		}
 
+		Controls.PILOT = new MovePilot(myChassis);
 		Controls.NAVIGATION = new Navigator(Controls.PILOT);
+		
 		try {
 			outputStream.writeUTF(Messages.DONE);
 		} catch (IOException e) {

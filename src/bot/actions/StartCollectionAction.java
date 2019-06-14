@@ -13,9 +13,9 @@ public class StartCollectionAction implements Action{
 	public void Perform() {
 		
 		
-		Controls.COLLECTOR.setSpeed((int)(-Controls.COLLECTOR.getMaxSpeed()*60));
+		Controls.COLLECTOR.setSpeed((int)(Controls.COLLECTOR.getMaxSpeed()*0.50));
 		
-		Controls.COLLECTOR.forward();
+		Controls.COLLECTOR.backward();
 	}
 
 }
