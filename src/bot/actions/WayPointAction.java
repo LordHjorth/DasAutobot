@@ -43,11 +43,14 @@ public class WayPointAction implements Action {
 		Controls.PILOT.setLinearSpeed(Controls.PILOT.getMaxLinearSpeed() * speed);
 
 		if (heading != null) {
+			
+			System.out.println("Heading " + heading);
 			Controls.NAVIGATION.goTo((float) x, (float) y, heading.floatValue());
 		} else {
 			Controls.NAVIGATION.goTo((float) x, (float) y);
 		}
 		Controls.NAVIGATION.waitForStop();
+		System.out.println(Controls.NAVIGATION.getPoseProvider().getPose().getHeading());
 	}
 
 }
