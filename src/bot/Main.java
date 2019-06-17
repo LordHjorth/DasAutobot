@@ -44,8 +44,8 @@ public class Main {
 //		double wheelDiameter = 3.8;
 //		double trackWidth = 12.2;
 
-		double wheelDiameter = 3.28;
-		double trackWidth = 21.37 / 2;
+		double wheelDiameter = 3.33;
+		double trackWidth = 20.77 / 2;
 
 		// Setup Motors
 
