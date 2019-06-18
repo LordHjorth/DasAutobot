@@ -16,11 +16,11 @@ public class ShakeAction implements Action {
 
 			Controls.PILOT.forward();
 			
-			Thread.sleep(200);
+			Thread.sleep(50);
 			
 			Controls.PILOT.backward();
 			
-			Thread.sleep(200);
+			Thread.sleep(50);
 			
 			Controls.PILOT.stop();
 		} catch (InterruptedException e) {
