@@ -10,6 +10,9 @@ import java.util.concurrent.Executors;
 
 import bot.actions.Action;
 import bot.actions.ActionList;
+import bot.actions.StartCollectionAction;
+import bot.actions.StopCollectionAction;
+import bot.actions.WaitAction;
 import bot.messages.Messages;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -24,6 +27,7 @@ import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.navigation.Navigator;
 import lejos.utility.Delay;
+import lejos.utility.PilotProps;
 
 public class Main {
 
@@ -39,24 +43,24 @@ public class Main {
 	public Main() throws IOException {
 
 		LCD.drawString("Booting that shiit", 0, 4);
-		Delay.msDelay(1000);
+//		Delay.msDelay(1000);
 
 //		double wheelDiameter = 3.8;
 //		double trackWidth = 12.2;
 
-		double wheelDiameter = 3.33;
-		double trackWidth = 20.77 / 2;
+		double wheelDiameter = 4.2;
+	//	double trackWidth = 12.3 / 2;
 
 		// Setup Motors
-
+		
 		Controls.COLLECTOR = new EV3MediumRegulatedMotor(MotorPort.A);
 		Controls.LEFT_WHEEL = new EV3LargeRegulatedMotor(MotorPort.B);
 		Controls.RIGHT_WHEEL = new EV3LargeRegulatedMotor(MotorPort.C);
 		Controls.PORT_OPEN = new EV3MediumRegulatedMotor(MotorPort.D);
 
-		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-1 * trackWidth)
+		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-15.9D/2D)
 				.invert(true);
-		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(trackWidth)
+		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(15.9D/2D)
 				.invert(true);
 
 		 myChassis = new WheeledChassis(new Wheel[] { rightWheel, leftWheel }, WheeledChassis.TYPE_DIFFERENTIAL);
@@ -65,7 +69,29 @@ public class Main {
 
 		// Setup ColorSensor
 		Controls.COLORSENSOR = new EV3ColorSensor(SensorPort.S4);
-
+		
+		/*
+		
+		//Controls.PILOT.travel(100);
+		
+		
+		Controls.PILOT.setAngularSpeed(Controls.PILOT.getMaxAngularSpeed() * 0.4);		
+		Controls.PILOT.rotate(-180);
+		Controls.PILOT.rotate(-180);
+		Controls.PILOT.rotate(-180);
+		Controls.PILOT.rotate(-180);
+		
+		
+		ActionList list = new ActionList();
+		list.add(new StartCollectionAction());
+		list.add(new WaitAction(5200));
+		list.add(new StopCollectionAction());
+		
+		ExecuteActions(list);
+		
+		//System.exit(0);
+		*/
+		
 		server = new ServerSocket(port);
 
 		while (true) {
@@ -141,7 +167,7 @@ public class Main {
 			executor.execute(runsensor);
 
 		}
-
+		
 	}
 
 	public void ExecuteActions(ActionList list) {
