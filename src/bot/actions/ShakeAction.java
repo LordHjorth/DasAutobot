@@ -12,21 +12,9 @@ public class ShakeAction implements Action {
 	@Override
 	public void Perform() {
 	
-		try {
-
-			Controls.PILOT.forward();
-			
-			Thread.sleep(50);
-			
-			Controls.PILOT.backward();
-			
-			Thread.sleep(50);
-			
-			Controls.PILOT.stop();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Controls.PILOT.travel(2);
+		
+		Controls.PILOT.travel(-2);
 
 	}
 

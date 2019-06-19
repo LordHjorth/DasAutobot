@@ -1,3 +1,4 @@
+
 package bot.actions;
 
 import bot.Controls;
@@ -15,7 +16,7 @@ public class GrepCollectionAction implements Action{
 		
 		Controls.COLLECTOR.setSpeed((int)(Controls.COLLECTOR.getMaxSpeed()*0.50));
 
-		Controls.COLLECTOR.rotate(-30);
+		Controls.COLLECTOR.rotate(-160);
 		Controls.COLLECTOR.waitComplete();
 	}
 
@@ -26,3 +27,4 @@ public class GrepCollectionAction implements Action{
 	}
 
 }
+
