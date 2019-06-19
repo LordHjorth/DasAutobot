@@ -16,11 +16,4 @@ public class ClosePortAction implements Action {
 		
 	}
 
-	@Override
-	public void stop() {
-	   
-		Controls.PORT_OPEN.rotate(0);
-		
-	}
-
 }

@@ -26,10 +26,6 @@ public class SoundAction implements Action{
 		
 	}
 
-	@Override
-	public void stop() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }

@@ -17,11 +17,6 @@ public class ShakeAction implements Action {
 		Controls.PILOT.travel(-2);
 
 	}
-
-	@Override
-	public void stop() {
-		Controls.PILOT.stop();
-		
-	}
+	
 
 }

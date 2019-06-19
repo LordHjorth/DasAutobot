@@ -19,12 +19,7 @@ public class GrepCollectionAction implements Action{
 		Controls.COLLECTOR.rotate(-160);
 		Controls.COLLECTOR.waitComplete();
 	}
-
-	@Override
-	public void stop() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }
 

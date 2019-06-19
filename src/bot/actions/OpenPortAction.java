@@ -16,10 +16,4 @@ public class OpenPortAction implements Action {
 		
 	}
 
-	@Override
-	public void stop() {
-		new ClosePortAction().Perform();
-		
-	}
-
 }

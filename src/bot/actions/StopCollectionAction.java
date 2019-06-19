@@ -20,9 +20,5 @@ public class StopCollectionAction implements Action{
 		Controls.COLLECTOR.resetTachoCount();
 	}
 
-	@Override
-	public void stop() {
-	   Controls.COLLECTOR.rotate(0);
-		
-	}
+
 }
