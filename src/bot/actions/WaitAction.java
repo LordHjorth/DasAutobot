@@ -24,4 +24,10 @@ public class WaitAction implements Action{
 		}
 	}
 
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

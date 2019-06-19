@@ -19,4 +19,10 @@ public class GrepCollectionAction implements Action{
 		Controls.COLLECTOR.waitComplete();
 	}
 
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -19,4 +19,10 @@ public class StopCollectionAction implements Action{
 		Controls.COLLECTOR.rotateTo((int)(360 - angle));
 		Controls.COLLECTOR.resetTachoCount();
 	}
+
+	@Override
+	public void stop() {
+	   Controls.COLLECTOR.rotate(0);
+		
+	}
 }

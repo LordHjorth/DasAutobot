@@ -73,4 +73,10 @@ public class WayPointAction implements Action {
 
 	}
 
+	@Override
+	public void stop() {
+		Controls.NAVIGATION.stop();
+		
+	}
+
 }

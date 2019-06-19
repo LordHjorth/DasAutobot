@@ -30,4 +30,10 @@ public class ShakeAction implements Action {
 
 	}
 
+	@Override
+	public void stop() {
+		Controls.PILOT.stop();
+		
+	}
+
 }

@@ -18,4 +18,10 @@ public class StartCollectionAction implements Action{
 		Controls.COLLECTOR.backward();
 	}
 
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

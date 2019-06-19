@@ -22,4 +22,10 @@ public class TravelAction implements Action{
 		
 	}
 
+	@Override
+	public void stop() {
+		Controls.PILOT.stop();
+		
+	}
+
 }

@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import bot.actions.Action;
 import bot.actions.ActionList;
 import bot.actions.StartCollectionAction;
+import bot.actions.StopAction;
 import bot.actions.StopCollectionAction;
 import bot.actions.WaitAction;
 import bot.messages.Messages;
@@ -36,9 +37,11 @@ public class Main {
 	private ObjectInputStream inputStream;
 	private int port = 4444;
 	private DataOutputStream outputStream;
-	private ExecutorService executor = Executors.newFixedThreadPool(2);
+	private ExecutorService executor = Executors.newFixedThreadPool(3);
 	private int counter = 0;
 	private WheeledChassis myChassis;
+	public static boolean stopaction = false;
+	private Action currenctaction = null;
 
 	public Main() throws IOException {
 
@@ -111,8 +114,33 @@ public class Main {
 
 					while (true) {
 						try {
-							ActionList list = (ActionList) inputStream.readObject();
-							ExecuteActions(list);
+							final ActionList list = (ActionList) inputStream.readObject();
+                            
+							for(Action action: list) {
+								if(action.getClass()==StopAction.class) {
+									currenctaction.stop();
+									stopaction = true;
+									break;
+									
+								}
+							}
+							
+							
+							Runnable executeactions = new Runnable() {
+
+								@Override
+								public void run() {
+
+											
+									ExecuteActions(list);
+							
+										
+
+									
+								}
+							};
+							executor.execute(executeactions);
+							
 						} catch (ClassNotFoundException | IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -142,7 +170,7 @@ public class Main {
 								counter++;
 
 								outputStream.writeUTF(Messages.COLLECTED);
-								Thread.sleep(1000);
+								Thread.sleep(500);
 
 							}
 
@@ -171,12 +199,17 @@ public class Main {
 	}
 
 	public void ExecuteActions(ActionList list) {
-
+        
 		for (Action action : list) {
-
+			if(stopaction) {
+				stopaction=false;
+				break;
+			}
+			currenctaction = action;
 			action.Perform();
+			
 		}
-
+       
 		Controls.PILOT = new MovePilot(myChassis);
 		Controls.NAVIGATION = new Navigator(Controls.PILOT);
 		

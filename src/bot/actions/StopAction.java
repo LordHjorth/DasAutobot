@@ -1,9 +1,6 @@
 package bot.actions;
 
-
-import lejos.hardware.Sound;
-
-public class VictoryAction implements Action {
+public class StopAction implements Action {
 
 	/**
 	 * 
@@ -13,7 +10,13 @@ public class VictoryAction implements Action {
 	@Override
 	public void Perform() {
 
-	   Sound.beepSequenceUp();
-	
+		
 	}
+
+	@Override
+	public void stop() {
+
+		
+	}
+
 }

@@ -12,7 +12,14 @@ public class ClosePortAction implements Action {
 	@Override
 	public void Perform() {
 	
-		Controls.PORT_OPEN.rotate(-120);
+		Controls.PORT_OPEN.rotate(-115);
+		
+	}
+
+	@Override
+	public void stop() {
+	   
+		Controls.PORT_OPEN.rotate(0);
 		
 	}
 

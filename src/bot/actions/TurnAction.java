@@ -21,4 +21,10 @@ public class TurnAction implements Action {
 		Controls.PILOT.rotate(deg);
 	}
 
+	@Override
+	public void stop() {
+		Controls.PILOT.stop();
+		
+	}
+
 }
