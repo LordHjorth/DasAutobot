@@ -137,7 +137,9 @@ public class Main {
 
 							int currentDetectedColor = Controls.COLORSENSOR.getColorID();
 
-							if (currentDetectedColor == Color.WHITE) {
+							if (currentDetectedColor == Color.WHITE || currentDetectedColor == Color.BLUE) {
+								
+								System.out.println("ONE MORE BAAAALL");
 
 								counter++;
 
