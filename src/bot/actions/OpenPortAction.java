@@ -11,9 +11,12 @@ public class OpenPortAction implements Action {
 
 	@Override
 	public void Perform() {
-	
+
 		Controls.PORT_OPEN.rotateTo(115);
-		
+
+		new ShakeAction(2).Perform();
+		new WaitAction(3000).Perform();
+		new ClosePortAction().Perform();
 	}
 
 }

@@ -1,8 +1,9 @@
 package bot.actions;
 
 import bot.Controls;
+import lejos.hardware.Sound;
 
-public class ClosePortAction implements Action {
+public class FinishAction implements Action {
 
 	/**
 	 * 
@@ -12,8 +13,8 @@ public class ClosePortAction implements Action {
 	@Override
 	public void Perform() {
 	
-		Controls.PORT_OPEN.rotateTo(0);
-		
+		Sound.beepSequence();	
+		Sound.beepSequenceUp();
 	}
 
 }

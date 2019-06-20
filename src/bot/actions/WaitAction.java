@@ -1,8 +1,6 @@
 package bot.actions;
 
 public class WaitAction implements Action{
-
-	
 	private long time;
 
 	public WaitAction(long time) {
