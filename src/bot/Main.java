@@ -18,18 +18,20 @@ import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.Color;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
 import lejos.robotics.navigation.Navigator;
+import lejos.robotics.navigation.Pose;
 
 public class Main {
 
 	private ServerSocket server;
 	private Socket client;
 	private ObjectInputStream inputStream;
-	private int port = 4444;
+	private int port = 44444;
 	private DataOutputStream outputStream;
 	private ExecutorService executor = Executors.newFixedThreadPool(2);
 	private int counter = 0;
@@ -43,7 +45,7 @@ public class Main {
 //		double wheelDiameter = 3.8;
 //		double trackWidth = 12.2;
 
-		double wheelDiameter = 4.2;
+		double wheelDiameter = 4.1;
 	//	double trackWidth = 12.3 / 2;
 
 		// Setup Motors
@@ -53,9 +55,9 @@ public class Main {
 		Controls.RIGHT_WHEEL = new EV3LargeRegulatedMotor(MotorPort.C);
 		Controls.PORT_OPEN = new EV3MediumRegulatedMotor(MotorPort.D);
 
-		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-13.5D/2D)
+		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-15.5D/2D)
 				.invert(true);
-		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(13.5D/2D)
+		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(15.5D/2D)
 				.invert(true);
 
 		 myChassis = new WheeledChassis(new Wheel[] { rightWheel, leftWheel }, WheeledChassis.TYPE_DIFFERENTIAL);
@@ -64,6 +66,8 @@ public class Main {
 
 		// Setup ColorSensor
 		Controls.COLORSENSOR = new EV3ColorSensor(SensorPort.S4);
+		Controls.COLORSENSOR.setCurrentMode("ColorID");
+		
 		
 		/*
 		
@@ -99,16 +103,18 @@ public class Main {
 			client.setTcpNoDelay(true);
 			
 			outputStream = new DataOutputStream(client.getOutputStream());
-			inputStream = new ObjectInputStream(new BufferedInputStream(client.getInputStream()));
+			inputStream = new ObjectInputStream(client.getInputStream());
 
 			Runnable inputGrapper = new Runnable() {
 
 				@Override
 				public void run() {
-
+					
+					ActionList list;
+					
 					while (true) {
 						try {
-							ActionList list = (ActionList) inputStream.readObject();
+							list = (ActionList) inputStream.readObject();
 							ExecuteActions(list);
 						} catch (ClassNotFoundException | IOException e) {
 							// TODO Auto-generated catch block
@@ -122,21 +128,23 @@ public class Main {
 				}
 			};
 
+			
 			executor.execute(inputGrapper);
 
+				
 			Runnable runsensor = new Runnable() {
 
 				@Override
 				public void run() {
-
+				
 					while (counter < 10) {
 						try {
 
-							int currentDetectedColor = Controls.COLORSENSOR.getColorID();
-
+							int currentDetectedColor =  Controls.COLORSENSOR.getColorID();
+							//System.out.println(currentDetectedColor);
 							if (currentDetectedColor == Color.WHITE || currentDetectedColor == Color.BLUE) {
 								
-								System.out.println("ONE MORE BAAAALL");
+								//System.out.println("ONE MORE BAAAALL");
 
 								counter++;
 
@@ -163,7 +171,7 @@ public class Main {
 				}
 			};
 
-			executor.execute(runsensor);
+			//executor.execute(runsensor);
 
 		}
 		
@@ -176,11 +184,12 @@ public class Main {
 			action.Perform();
 		}
 
-		Controls.PILOT = new MovePilot(myChassis);
-		Controls.NAVIGATION = new Navigator(Controls.PILOT);
+		Controls.NAVIGATION.clearPath();
+		Controls.NAVIGATION.getPoseProvider().setPose(new Pose());
 		
 		try {
 			outputStream.writeUTF(Messages.DONE);
+			outputStream.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
