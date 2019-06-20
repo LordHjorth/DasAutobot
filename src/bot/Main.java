@@ -1,5 +1,6 @@
 package bot;
 
+import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -52,9 +53,9 @@ public class Main {
 		Controls.RIGHT_WHEEL = new EV3LargeRegulatedMotor(MotorPort.C);
 		Controls.PORT_OPEN = new EV3MediumRegulatedMotor(MotorPort.D);
 
-		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-15.9D/2D)
+		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-13.5D/2D)
 				.invert(true);
-		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(15.9D/2D)
+		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(13.5D/2D)
 				.invert(true);
 
 		 myChassis = new WheeledChassis(new Wheel[] { rightWheel, leftWheel }, WheeledChassis.TYPE_DIFFERENTIAL);
@@ -95,8 +96,10 @@ public class Main {
 
 			LCD.drawString("Client Connected", 0, 4);
 
+			client.setTcpNoDelay(true);
+			
 			outputStream = new DataOutputStream(client.getOutputStream());
-			inputStream = new ObjectInputStream(client.getInputStream());
+			inputStream = new ObjectInputStream(new BufferedInputStream(client.getInputStream()));
 
 			Runnable inputGrapper = new Runnable() {
 

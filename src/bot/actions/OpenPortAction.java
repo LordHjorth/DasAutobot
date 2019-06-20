@@ -12,7 +12,7 @@ public class OpenPortAction implements Action {
 	@Override
 	public void Perform() {
 	
-		Controls.PORT_OPEN.rotate(115);
+		Controls.PORT_OPEN.rotateTo(115);
 		
 	}
 

@@ -18,6 +18,7 @@ public class TravelAction implements Action{
 	@Override
 	public void Perform() {
 
+		Controls.PILOT.setLinearSpeed(Controls.PILOT.getMaxLinearSpeed() * 0.8F);
 		Controls.PILOT.travel(distance,false);
 		
 	}
