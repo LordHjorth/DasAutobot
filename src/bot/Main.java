@@ -148,11 +148,10 @@ public class Main {
 
 								counter++;
 
-								outputStream.writeUTF(Messages.COLLECTED);
-								Thread.sleep(1000);
-
 							}
 
+							Thread.sleep(1000);
+							
 						} catch (Exception e) {
 
 							e.printStackTrace();
@@ -171,7 +170,7 @@ public class Main {
 				}
 			};
 
-			//executor.execute(runsensor);
+			executor.execute(runsensor);
 
 		}
 		
