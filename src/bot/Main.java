@@ -55,9 +55,9 @@ public class Main {
 		Controls.RIGHT_WHEEL = new EV3LargeRegulatedMotor(MotorPort.C);
 		Controls.PORT_OPEN = new EV3MediumRegulatedMotor(MotorPort.D);
 
-		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-15.5D/2D)
+		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-13.2D/2D)
 				.invert(true);
-		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(15.5D/2D)
+		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(13.2D/2D)
 				.invert(true);
 
 		 myChassis = new WheeledChassis(new Wheel[] { rightWheel, leftWheel }, WheeledChassis.TYPE_DIFFERENTIAL);
