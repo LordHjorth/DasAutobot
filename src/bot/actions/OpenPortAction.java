@@ -7,7 +7,7 @@ public class OpenPortAction implements Action {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8970961981440617810L;
 
 	@Override
 	public void Perform() {
