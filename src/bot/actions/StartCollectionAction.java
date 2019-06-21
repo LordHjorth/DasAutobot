@@ -13,7 +13,7 @@ public class StartCollectionAction implements Action{
 	public void Perform() {
 		
 		
-		Controls.COLLECTOR.setSpeed((int)(Controls.COLLECTOR.getMaxSpeed()*0.50));
+		Controls.COLLECTOR.setSpeed((int)(Controls.COLLECTOR.getMaxSpeed()*0.35));
 		
 		Controls.COLLECTOR.backward();
 	}

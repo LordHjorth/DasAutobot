@@ -14,8 +14,8 @@ public class OpenPortAction implements Action {
 
 		Controls.PORT_OPEN.rotateTo(115);
 
-		new ShakeAction(2).Perform();
-		new WaitAction(3000).Perform();
+		new ShakeAction(3).Perform();
+		new WaitAction(3500).Perform();
 		new ClosePortAction().Perform();
 	}
 

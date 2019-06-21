@@ -45,7 +45,7 @@ public class Main {
 //		double wheelDiameter = 3.8;
 //		double trackWidth = 12.2;
 
-		double wheelDiameter = 4.1;
+		double wheelDiameter = 4.2;
 	//	double trackWidth = 12.3 / 2;
 
 		// Setup Motors
@@ -55,9 +55,9 @@ public class Main {
 		Controls.RIGHT_WHEEL = new EV3LargeRegulatedMotor(MotorPort.C);
 		Controls.PORT_OPEN = new EV3MediumRegulatedMotor(MotorPort.D);
 
-		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-13.2D/2D)
+		Wheel leftWheel = WheeledChassis.modelWheel(Controls.LEFT_WHEEL, wheelDiameter).offset(-13.4D/2D)
 				.invert(true);
-		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(13.2D/2D)
+		Wheel rightWheel = WheeledChassis.modelWheel(Controls.RIGHT_WHEEL, wheelDiameter).offset(13.4D/2D)
 				.invert(true);
 
 		 myChassis = new WheeledChassis(new Wheel[] { rightWheel, leftWheel }, WheeledChassis.TYPE_DIFFERENTIAL);
